@@ -12,9 +12,15 @@ public class Shooter : MonoBehaviour
     public LayerMask hittableMask;
     public GameObject hitEffectPrefab;
     public Transform shootPoint;
+    private Magazine magazine;
 
     public float shootDelay = 0.1f;
     public float maxDistance = 100f;
+
+    private void Awake()
+    {
+        magazine = GetComponent<Magazine>();
+    }
 
     private void Start()
     {
@@ -37,7 +43,14 @@ public class Shooter : MonoBehaviour
 
         while (true)
         {
-            Shoot();
+            if (magazine.Use())
+            {
+                Shoot();
+            }
+            else
+            {
+                OnShootFail?.Invoke();
+            }
             yield return wfs;
         }
     }
@@ -45,8 +58,12 @@ public class Shooter : MonoBehaviour
     private void Shoot()
     {
         if(Physics.Raycast(shootPoint.position, shootPoint.forward, out RaycastHit hitInfo, maxDistance, hittableMask)){
-            OnShootSuccess?.Invoke(hitInfo.point);
             Instantiate(hitEffectPrefab, hitInfo.point, Quaternion.identity);
+
+            var hitObject = hitInfo.transform.GetComponent<Hittable>();
+            hitObject.Hit();
+
+            OnShootSuccess?.Invoke(hitInfo.point);
         }
         else
         {
