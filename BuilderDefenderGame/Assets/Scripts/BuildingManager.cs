@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BuildingManager : MonoBehaviour
-{
-    [SerializeField] private Transform pfWoodHarvester;
-    [SerializeField] private Transform pfStoneHarvester;
-    [SerializeField] private Transform pfGoldHarvester;
-
-    public Transform currentTrm;
+{   
+    private BuildingTypeListSO buildingList;
+    public BuildingTypeSO currentBuilding;
+    private Camera _mainCam;
+    public Camera MainCam => _mainCam;
 
     private void Start()
     {
-        currentTrm = pfWoodHarvester;
+        buildingList = Resources.Load<BuildingTypeListSO>(typeof(BuildingTypeListSO).Name);
+        currentBuilding = buildingList.buildingTypeSO[0];
+        _mainCam = Camera.main;
     }
 
     private void Update()
@@ -23,21 +24,21 @@ public class BuildingManager : MonoBehaviour
     private void KeyInput()
     {
         if (Input.GetKeyDown(KeyCode.Q))
-            currentTrm = pfWoodHarvester.transform;
+            currentBuilding = buildingList.buildingTypeSO[0];
         if (Input.GetKeyDown(KeyCode.W))
-            currentTrm = pfStoneHarvester.transform;
+            currentBuilding = buildingList.buildingTypeSO[1];
         if (Input.GetKeyDown(KeyCode.E))
-            currentTrm = pfGoldHarvester.transform;
+            currentBuilding = buildingList.buildingTypeSO[2];
 
         if (Input.GetMouseButtonDown(0))
         {
-            Instantiate(currentTrm, GetMouseWorldPosition(), Quaternion.identity);
+            Instantiate(currentBuilding.prefab, GetMouseWorldPosition(), Quaternion.identity);
         }
     }
 
     private Vector3 GetMouseWorldPosition()
     {
-        Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mouseWorldPosition = MainCam.ScreenToWorldPoint(Input.mousePosition);
         mouseWorldPosition.z = 0;
         return mouseWorldPosition;
     }
