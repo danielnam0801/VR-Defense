@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "SO/ResourceType")]
+[CreateAssetMenu(menuName = "ScriptableObjects/ResourceType")]
 public class ResourceTypeSO : ScriptableObject
 {
-    public string name;
+    public string nameString;
+    public Sprite sprite;
 }
