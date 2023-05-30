@@ -35,6 +35,12 @@ public class ResourcesUI : MonoBehaviour
     }
     private void Start()
     {
+        ResourceManager.Instance.OnResourceAmountChanged += UpdateResourceAmount;
+        UpdateResourceAmount();
+    }
+
+    private void UpdateResourceAmount()
+    {
         foreach (ResourceTypeSO resourceType in resourceTypeList.list)
         {
             Transform resourceTransform = resourceTransformDic[resourceType];
@@ -42,6 +48,4 @@ public class ResourcesUI : MonoBehaviour
             resourceTransform.Find("text").GetComponent<TextMeshProUGUI>().SetText(resourceAmount.ToString());
         }
     }
-
-
 }
