@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4342306202065349404}
   - component: {fileID: 2290468118015076872}
   - component: {fileID: -5065332898551339076}
+  - component: {fileID: 7657329192325890060}
   m_Layer: 0
   m_Name: pfGoldHarvester
   m_TagString: Untagged
@@ -111,3 +112,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingType: {fileID: 11400000, guid: f4901da33c4869845a6f05e408ea2af4, type: 2}
+--- !u!114 &7657329192325890060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8258492657952701510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cc3ee66e35ab5d47b38312df3251faa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runOnce: 1

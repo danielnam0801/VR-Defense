@@ -6,7 +6,8 @@ using System;
 public class ResourceManager : MonoBehaviour
 {
     public static ResourceManager Instance { get; private set; }
-    public event Action OnResourceAmountChanged;
+
+    public event EventHandler OnResourceAmountChanged;
 
     private Dictionary<ResourceTypeSO, int> resourceAmountDic;
     private ResourceTypeListSO resourceTypeList;
@@ -26,9 +27,10 @@ public class ResourceManager : MonoBehaviour
     public void AddResource(ResourceTypeSO resourceType, int amount)
     {
         resourceAmountDic[resourceType] += amount;
-        OnResourceAmountChanged?.Invoke();
+        OnResourceAmountChanged?.Invoke(this, EventArgs.Empty);
     }
 
+    
     public int GetResourceAmount(ResourceTypeSO resourceType)
     {
         return resourceAmountDic[resourceType];

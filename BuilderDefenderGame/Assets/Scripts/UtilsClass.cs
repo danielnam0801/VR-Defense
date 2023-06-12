@@ -4,15 +4,16 @@ using UnityEngine;
 
 public static class UtilsClass
 {
-    private static Camera mainCam;
+    private static Camera mainCamera;
     public static Vector3 GetMouseWorldPosition()
     {
-        if (mainCam == null) mainCam = Camera.main;
-
-        Vector3 mouseWorldPosition = mainCam.ScreenToWorldPoint(Input.mousePosition);
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+        } 
+        Vector3 mouseWorldPosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         mouseWorldPosition.z = 0f;
 
         return mouseWorldPosition;
     }
-
 }

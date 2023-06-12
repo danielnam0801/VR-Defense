@@ -5,7 +5,7 @@ using Cinemachine;
 
 public class CameraHandler : MonoBehaviour
 {
-    [SerializeField] CinemachineVirtualCamera vCam;
+    [SerializeField] private CinemachineVirtualCamera virtualCamera;
     private float orthographicSize;
     private float targetOrthographicSize;
 
@@ -18,23 +18,13 @@ public class CameraHandler : MonoBehaviour
 
     private void Start()
     {
-        orthographicSize = vCam.m_Lens.OrthographicSize;
+        orthographicSize = virtualCamera.m_Lens.OrthographicSize;
+        targetOrthographicSize = orthographicSize;
     }
-
     private void Update()
     {
         HandleMovement();
         HandleZoom();
-    }
-
-    private void HandleZoom()
-    {
-        targetOrthographicSize += -Input.mouseScrollDelta.y * Time.deltaTime * zoomAmount;
-        targetOrthographicSize = Mathf.Clamp(targetOrthographicSize, minOrthographicSize, maxOrthographicSize);
-
-        orthographicSize = Mathf.Lerp(orthographicSize, targetOrthographicSize, Time.deltaTime * zoomSpeed);
-
-        vCam.m_Lens.OrthographicSize = orthographicSize;
     }
 
     private void HandleMovement()
@@ -44,6 +34,16 @@ public class CameraHandler : MonoBehaviour
 
         Vector3 moveDir = new Vector3(x, y).normalized;
 
+
         transform.position += moveDir * moveSpeed * Time.deltaTime;
+    }
+    private void HandleZoom()
+    {
+        targetOrthographicSize += -Input.mouseScrollDelta.y * zoomAmount;
+        targetOrthographicSize = Mathf.Clamp(targetOrthographicSize, minOrthographicSize, maxOrthographicSize);
+
+        orthographicSize = Mathf.Lerp(orthographicSize, targetOrthographicSize, Time.deltaTime * zoomSpeed);
+
+        virtualCamera.m_Lens.OrthographicSize = orthographicSize;
     }
 }

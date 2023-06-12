@@ -35,7 +35,12 @@ public class ResourcesUI : MonoBehaviour
     }
     private void Start()
     {
-        ResourceManager.Instance.OnResourceAmountChanged += UpdateResourceAmount;
+        ResourceManager.Instance.OnResourceAmountChanged += ResourceManager_OnResourceAmountChanged;
+        UpdateResourceAmount();
+    }
+
+    private void ResourceManager_OnResourceAmountChanged(object sender, System.EventArgs e)
+    {
         UpdateResourceAmount();
     }
 
@@ -48,4 +53,6 @@ public class ResourcesUI : MonoBehaviour
             resourceTransform.Find("text").GetComponent<TextMeshProUGUI>().SetText(resourceAmount.ToString());
         }
     }
+
+    
 }
