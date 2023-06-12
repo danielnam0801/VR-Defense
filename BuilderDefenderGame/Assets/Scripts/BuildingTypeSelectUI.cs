@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class BuildingTypeSelectUI : MonoBehaviour
 {
     [SerializeField] private Sprite arrowSprite;
+    [SerializeField] private List<BuildingTypeSO> ignoreBuildingTypeSO;
 
     private BuildingTypeListSO buildingTypeList;
     private Dictionary<BuildingTypeSO, Transform> btnTransformDic;
@@ -40,6 +41,8 @@ public class BuildingTypeSelectUI : MonoBehaviour
 
         foreach (BuildingTypeSO buildingType in buildingTypeList.list)
         {
+            if(ignoreBuildingTypeSO.Contains(buildingType)) continue;
+
             Transform btnTransform = Instantiate(btnTemplate, transform);
             btnTransform.gameObject.SetActive(true);
 

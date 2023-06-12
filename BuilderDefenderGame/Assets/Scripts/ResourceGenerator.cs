@@ -24,7 +24,10 @@ public class ResourceGenerator : MonoBehaviour
             ResourceNode resourceNode = collider2D.GetComponent<ResourceNode>();
             if(resourceNode != null)
             {
-                nearbyResourceAmount++;
+                if(resourceNode.resourceType == resourceGeneratorData.resourceType)
+                {
+                    nearbyResourceAmount++;
+                }
             }
         }
 
@@ -44,5 +47,10 @@ public class ResourceGenerator : MonoBehaviour
             timer += timerMax;
             ResourceManager.Instance.AddResource(resourceGeneratorData.resourceType, 1);
         }
+    }
+
+    public ResourceGeneratorData GetResourceGeneratorData()
+    {
+
     }
 }
