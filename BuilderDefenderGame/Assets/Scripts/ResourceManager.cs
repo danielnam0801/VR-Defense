@@ -5,6 +5,7 @@ using System;
 
 public class ResourceManager : MonoBehaviour
 {
+    [SerializeField] private List<ResourceAmount> startingResourceAmount;
     public static ResourceManager Instance { get; private set; }
 
     public event EventHandler OnResourceAmountChanged;
@@ -22,6 +23,11 @@ public class ResourceManager : MonoBehaviour
         {
             resourceAmountDic[resourceType] = 0;
         }
+
+        foreach(ResourceAmount resourceAmount in startingResourceAmount)
+        {
+            AddResource(resourceAmount.resourceType, resourceAmount.amount);
+        }
     }
    
     public void AddResource(ResourceTypeSO resourceType, int amount)
@@ -34,5 +40,30 @@ public class ResourceManager : MonoBehaviour
     public int GetResourceAmount(ResourceTypeSO resourceType)
     {
         return resourceAmountDic[resourceType];
+    }
+
+    public bool CanAfford(ResourceAmount[] resourceAmountArray)
+    {
+        foreach(ResourceAmount resourceAmount in resourceAmountArray)
+        {
+            if (GetResourceAmount(resourceAmount.resourceType) >= resourceAmount.amount)
+            {
+
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void SpendResource(ResourceAmount[] resourceAmountArray)
+    {
+        foreach(ResourceAmount resourceAmount in resourceAmountArray)
+        {
+            resourceAmountDic[resourceAmount.resourceType] -= resourceAmount.amount;
+        }
     }
 }

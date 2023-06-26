@@ -1,13 +1,12 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using System;
 public class BuildingTypeSelectUI : MonoBehaviour
 {
     [SerializeField] private Sprite arrowSprite;
-    [SerializeField] private List<BuildingTypeSO> ignoreBuildingTypeSO;
+    [SerializeField] private List<BuildingTypeSO> ignoreBuildingTypeList;
 
     private BuildingTypeListSO buildingTypeList;
     private Dictionary<BuildingTypeSO, Transform> btnTransformDic;
@@ -37,11 +36,23 @@ public class BuildingTypeSelectUI : MonoBehaviour
             BuildingManager.Instance.SetActiveBuildingType(null);
         });
 
+        MouseEnterExitEvents mouseEnterExitEvents = arrowBtn.GetComponent<MouseEnterExitEvents>();
+        mouseEnterExitEvents.OnMouseEnter += (object sender, EventArgs e) =>
+        {
+            TooltipUI.Instance.Show("Arrow Button");
+        };
+
+        mouseEnterExitEvents.OnMouseExit += (object sender, EventArgs e) =>
+        {
+            TooltipUI.Instance.Hide();
+        };
+
+
         index++;
 
         foreach (BuildingTypeSO buildingType in buildingTypeList.list)
         {
-            if(ignoreBuildingTypeSO.Contains(buildingType)) continue;
+            if (ignoreBuildingTypeList.Contains(buildingType)) continue;
 
             Transform btnTransform = Instantiate(btnTemplate, transform);
             btnTransform.gameObject.SetActive(true);
@@ -56,14 +67,28 @@ public class BuildingTypeSelectUI : MonoBehaviour
                 BuildingManager.Instance.SetActiveBuildingType(buildingType);
             });
 
+            mouseEnterExitEvents = btnTransform.GetComponent<MouseEnterExitEvents>();
+            mouseEnterExitEvents.OnMouseEnter += (object sender, EventArgs e) =>
+            {
+                TooltipUI.Instance.Show(buildingType.nameString+"\n"+buildingType.GetReouseCostString());
+            };
+
+            mouseEnterExitEvents.OnMouseExit += (object sender, EventArgs e) =>
+            {
+                TooltipUI.Instance.Hide();
+            };
+
             btnTransformDic[buildingType] = btnTransform;
             index++;
         }
     }
 
+
+
     private void Start()
     {
-        BuildingManager.Instance.OnActiveBuildingTypeChanged += BuildingManager_OnActiveBuildingTypeChanged;    
+        BuildingManager.Instance.OnActiveBuildingTypeChanged += BuildingManager_OnActiveBuildingTypeChanged;
+        UpdateActiveBuildingTypeButton();
     }
 
     private void BuildingManager_OnActiveBuildingTypeChanged(object sender, BuildingManager.OnActiveBuildingTypeChangedEventArgs e)

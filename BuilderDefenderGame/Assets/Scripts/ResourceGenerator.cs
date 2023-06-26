@@ -16,27 +16,21 @@ public class ResourceGenerator : MonoBehaviour
 
     private void Start()
     {
-        Collider2D[] collider2DArray = Physics2D.OverlapCircleAll(transform.position, resourceGeneratorData.resourceDetectionRadius);
 
-        int nearbyResourceAmount = 0;
-        foreach(Collider2D collider2D in collider2DArray)
+        int nearbyResoureAmount = GetNearbyResourceAmount(transform.position, resourceGeneratorData);
+
+        if (nearbyResoureAmount == 0)
         {
-            ResourceNode resourceNode = collider2D.GetComponent<ResourceNode>();
-            if(resourceNode != null)
-            {
-                if(resourceNode.resourceType == resourceGeneratorData.resourceType)
-                {
-                    nearbyResourceAmount++;
-                }
-            }
+            enabled = false;
+            transform.Find("pfResourceGeneratorOverlay").gameObject.SetActive(false);
+        }
+        else
+        {
+            timerMax = (resourceGeneratorData.timerMax / 2f) +
+                resourceGeneratorData.timerMax *
+                (1 - (float)nearbyResoureAmount / resourceGeneratorData.maxResourceAmount);
         }
 
-        nearbyResourceAmount = Mathf.Clamp(nearbyResourceAmount, 0, resourceGeneratorData.maxResourceAmount);
-        if (nearbyResourceAmount == 0) enabled = false;
-        else timerMax = (resourceGeneratorData.timerMax/2f) + resourceGeneratorData.timerMax * 
-                (1-(float)nearbyResourceAmount / resourceGeneratorData.maxResourceAmount);
-
-        Debug.Log("nearByResourceNode : " + nearbyResourceAmount + ", timerMax" + timerMax);
     }
 
     private void Update()
@@ -51,6 +45,38 @@ public class ResourceGenerator : MonoBehaviour
 
     public ResourceGeneratorData GetResourceGeneratorData()
     {
+        return resourceGeneratorData;
+    }
 
+    public float GetAmountGeneratedPerSecond()
+    {
+        return 1 / timerMax;
+    }
+
+    public float GetTimerNormalized()
+    {
+        return timer / timerMax;
+    }
+
+    public static int GetNearbyResourceAmount(Vector3 position, ResourceGeneratorData resourceGeneratorData)
+    {
+        Collider2D[] collider2DArray = Physics2D.OverlapCircleAll(position, resourceGeneratorData.resourceDetectionRadius);
+
+        int nearbyResoureAmount = 0;
+        foreach (Collider2D collider2D in collider2DArray)
+        {
+            ResourceNode resourceNode = collider2D.GetComponent<ResourceNode>();
+            if (resourceNode != null)
+            {
+                if (resourceNode.resourceType == resourceGeneratorData.resourceType)
+                {
+                    nearbyResoureAmount++;
+                }
+            }
+        }
+
+        nearbyResoureAmount = Mathf.Clamp(nearbyResoureAmount, 0, resourceGeneratorData.maxResourceAmount);
+
+        return nearbyResoureAmount;
     }
 }
