@@ -37,7 +37,7 @@ public class BuildingManager : MonoBehaviour
                     {
                         ResourceManager.Instance.SpendResource(activeBuildingType.constructionResoureCostArray);
                         //Instantiate(activeBuildingType.prefab, UtilsClass.GetMouseWorldPosition(), Quaternion.identity);
-                        BuildingConstruction.Create(UtilsClass.GetMouseWorldPosition(), buildingType:activeBuildingType);
+                        BuildingConstruction.Create(UtilsClass.GetMouseWorldPosition(), activeBuildingType);
                     }
                     else
                     {
