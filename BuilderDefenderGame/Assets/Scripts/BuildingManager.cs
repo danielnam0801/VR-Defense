@@ -24,6 +24,15 @@ public class BuildingManager : MonoBehaviour
         Instance = this;
         buildingTypeList = Resources.Load<BuildingTypeListSO>(typeof(BuildingTypeListSO).Name);
     }
+    private void Start()
+    {
+        hqBuilding.GetComponent<HealthSystem>().OnDied += BuildingManager_OnDied;
+    }
+
+    private void BuildingManager_OnDied(object sender, EventArgs e)
+    {
+        GameOverUI.Instance.Show();
+    }
 
     private void Update()
     {
@@ -90,6 +99,18 @@ public class BuildingManager : MonoBehaviour
                 }
             }
         }
+
+        if (buildingType.hasResourceGenerator)
+        {
+            ResourceGeneratorData resourceGenerator = buildingType.resourceGeneratorData;
+            int nearbyResourAmount = ResourceGenerator.GetNearbyResourceAmount(position, resourceGenerator);
+            if (nearbyResourAmount == 0)
+            {
+                errorMessage = "No ResourceNode";
+                return false;
+            }
+        }
+
 
         float maxConstructionRadius = 25f;
         collider2DArray = Physics2D.OverlapCircleAll(position, maxConstructionRadius);
